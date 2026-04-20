@@ -1,0 +1,4 @@
+1001;Luca;Rossi;3A
+1002;Giulia;Bianchi;3A
+1007;Marta;Romano;3A
+1017;Martina;Fontana;3A
