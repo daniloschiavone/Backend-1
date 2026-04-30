@@ -49,10 +49,10 @@ public class InserisciStudenti {
             stmt.close();
             conn.close();
 
-            System.out.println("\n✅ Tutti i 4 nuovi studenti sono stati aggiunti con successo!");
+            System.out.println("\n Tutti i 4 nuovi studenti sono stati aggiunti con successo!");
 
         } catch (Exception e) {
-            System.out.println("\n❌ ERRORE DURANTE L'INSERIMENTO!");
+            System.out.println("\n ERRORE DURANTE L'INSERIMENTO!");
             System.out.println(e.getMessage());
         }
     }
