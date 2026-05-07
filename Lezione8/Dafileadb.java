@@ -6,6 +6,7 @@
 package Lezione8;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,10 +20,16 @@ public class Dafileadb {
         String user = "root";
 
         // 1.  password in modo sicuro
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Inserisci la password di MySQL: ");
-        String password = scanner.nextLine();
-        scanner.close();
+        Console console = System.console();
+        String password;
+        if (console != null) {
+            char[] pwd = console.readPassword("Inserisci la password di MySQL: ");
+            password = new String(pwd);
+        } else {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Inserisci la password di MySQL: ");
+            password = scanner.nextLine();
+        }
 
         String percorsoFile = "Lezione8/studenti_record.csv";
 
@@ -32,7 +39,7 @@ public class Dafileadb {
             System.out.println("Connessione stabilita!\n");
 
             // 3.  query (PreparedStatement previene SQL Injection)
-            String checkSql = "SELECT id_studente FROM studenti WHERE nome = ? AND cognome = ?";
+            String checkSql = "SELECT id_studente FROM studenti WHERE nome = ? AND cognome = ? AND data_nascita = ?";
             String insertSql = "INSERT INTO studenti (nome, cognome, data_nascita) VALUES (?, ?, ?)";
             String updateSql = "UPDATE studenti SET data_nascita = ? WHERE id_studente = ?";
 
@@ -45,30 +52,31 @@ public class Dafileadb {
             String riga;
 
             // SALTIAMO LA PRIMA RIGA (Intestazione: Nome,Cognome,Data_nascita)
-            br.readLine(); 
+            br.readLine();
 
             System.out.println("--- INIZIO ELABORAZIONE FILE ---");
-            
+
             // Leggiamo riga per riga dal file finché non finiscono
             while ((riga = br.readLine()) != null) {
                 String[] dati = riga.split(",");
-                
+
                 if (dati.length == 3) {
                     // Puliamo eventuali spazi vuoti
                     String nome = dati[0].trim();
                     String cognome = dati[1].trim();
                     String dataNascita = dati[2].trim();
+                    java.sql.Date data = java.sql.Date.valueOf(dataNascita);
 
                     // Controlliamo se lo studente è già nel DB
                     checkStmt.setString(1, nome);
                     checkStmt.setString(2, cognome);
-                    checkStmt.setDate(3, java.sql.Date.valueOf(dataNascita));
+                    checkStmt.setDate(3, data);
                     ResultSet rs = checkStmt.executeQuery();
 
                     if (rs.next()) {
                         // ESISTE GIÀ -> UPDATE
                         int id = rs.getInt("id_studente");
-                        updateStmt.setDate(1, java.sql.Date.valueOf(dataNascita));
+                        updateStmt.setDate(1, data);
                         updateStmt.setInt(2, id);
                         updateStmt.executeUpdate();
                         System.out.println(" AGGIORNATO: " + nome + " " + cognome);
@@ -76,11 +84,11 @@ public class Dafileadb {
                         // NON ESISTE -> INSERT
                         insertStmt.setString(1, nome);
                         insertStmt.setString(2, cognome);
-                        insertStmt.setDate (3, java.sql.Date.valueOf(dataNascita));
+                        insertStmt.setDate(3, data);
                         insertStmt.executeUpdate();
                         System.out.println("  INSERITO: " + nome + " " + cognome);
                     }
-                    rs.close(); 
+                    rs.close();
                 }
             }
 
@@ -90,7 +98,7 @@ public class Dafileadb {
             insertStmt.close();
             updateStmt.close();
             conn.close();
-            
+
             System.out.println("--- FINE ELABORAZIONE ---");
             System.out.println("Operazione completata! Database aggiornato e connessione chiusa.");
 
