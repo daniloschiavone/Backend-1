@@ -1,0 +1,78 @@
+# =========================
+# 1. Credenziali e Segreti
+# =========================
+.env
+.env.*
+*.pem
+*.key
+secret.json
+
+# =========================
+# 2. Node.js / JavaScript
+# =========================
+node_modules/
+npm-debug.log
+yarn-error.log
+dist/
+build/
+.next/
+
+# =========================
+# 3. Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+pip-log.txt
+
+# =========================
+# 4. Java / C / Compilati
+# =========================
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+out/
+bin/
+
+# =========================
+# 5. IDE e Editor
+# =========================
+# VS Code
+.vscode/
+!.vscode/settings.json # (Togli il punto esclamativo se NON vuoi condividere i settings del workspace)
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IntelliJ / Eclipse
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# =========================
+# 6. Sistema Operativo
+# =========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+.directory
+
+# =========================
+# 7. Log e Database Locali
+# =========================
+*.log
+*.sqlite
+*.sqlite3
